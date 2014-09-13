@@ -1,3 +1,5 @@
+use std::fmt::{Formatter, Show, FormatError};
+
 trait Nat {}
 
 struct Z;
