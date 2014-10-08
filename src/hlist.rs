@@ -4,7 +4,7 @@ trait HList {
   fn cons<H>(self, xs: H) -> HCons<H, Self>;
 }
 
-struct HCons<H, T> {
+struct HCons<H, T: HList> {
   head: H,
   tail: Box<T>
 }
