@@ -3,3 +3,8 @@
 name = "molten"
 version = "0.0.1"
 authors = ["Jared Roesch <roeschinc@gmail.com>"]
+
+[lib]
+
+name = "molten"
+path = "src/lib.rs"

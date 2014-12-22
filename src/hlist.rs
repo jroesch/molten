@@ -1,4 +1,6 @@
-use std::fmt::{Formatter, Show, FormatError};
+use std::fmt;
+use std::fmt::{Formatter, Show};
+use nat::*;
 
 trait HList {
   fn cons<H>(self, xs: H) -> HCons<H, Self>;
@@ -26,13 +28,13 @@ impl HList for HNil {
 fn hnil() -> HNil { HNil }
 
 impl Show for HNil {
-  fn fmt(&self, formatter: &mut Formatter) -> Result<(), FormatError> {
+  fn fmt(&self, formatter: &mut Formatter) -> Result<(), fmt::Error> {
     formatter.write_str("HNil"); Ok(())
   }
 }
 
 impl<H: Show, T: HList + Show> Show for HCons<H, T> {
-  fn fmt(&self, formatter: &mut Formatter) -> Result<(), FormatError> {
+  fn fmt(&self, formatter: &mut Formatter) -> Result<(), fmt::Error> {
     formatter.write_str(self.head.to_string().as_slice());
     formatter.write_str(" :: ");
     formatter.write_str(self.tail.to_string().as_slice());
@@ -57,6 +59,27 @@ impl<H, T: HList> IsHCons<H, T> for HCons<H, T> {
   }
 }
 
+// Still not stable enough
+trait Take<N: Nat> {
+    type R: HList;
+    fn take(&self, n: N) -> <Self as Take<N>>::R;
+}
+
+impl<H: HList> Take<Z> for H {
+    type R = H;
+    fn take(&self, n: Z) -> H {
+        panic!("I only care about type checking")
+    }
+}
+
+// FIXME (#18655) refers to the error here.
+impl<H, T: HList + Take<N>, N: Nat> Take<S<N>> for HCons<H, T> {
+    type R = HCons<H, <T as Take<N>>::R>;
+    fn take(&self, n: S<N>) -> HCons<H, <T as Take<N>>::R> {
+        panic!("only care about type checking")
+    }
+}
+
 // // This part doesn't work w/o multi dispatch
 // trait Take<N, H, R> {
 //   fn take(&self, n: N) -> R;
@@ -74,10 +97,9 @@ impl<H, T: HList> IsHCons<H, T> for HCons<H, T> {
 //   }
 // }
 
-fn main() {
-  let xs: HCons<int, HCons<int, HNil>> = hnil().cons(2).cons(1);
-  //hnil().head(); //fails
-  println!("{}", xs);
-  let ys = hnil().cons(1u);
-  println!("{}", ys.head());
+#[test]
+fn test_that_take_works() {
+    let xs: HCons<int, HCons<int, HNil>> = hnil().cons(2).cons(1);
+    let ys = xs.take(Z);
+    let zs = xs.take(S { pred: Z });
 }

@@ -1,6 +1,11 @@
+#![feature(
+    associated_types,
+    macro_rules,
+    unboxed_closures,
+    globs
+)]
+
 pub mod nat;
 pub mod hlist;
-
-#[test]
-fn it_works() {
-}
+pub mod lazy;
+pub mod type_equality;
