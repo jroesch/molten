@@ -66,7 +66,7 @@ trait Take<N: Nat> {
 }
 
 impl<H: HList> Take<Z> for H {
-    type R = H;
+    type R = HNil;
     fn take(&self, n: Z) -> H {
         panic!("I only care about type checking")
     }
