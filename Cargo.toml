@@ -1,10 +1,10 @@
 [package]
-
 name = "molten"
 version = "0.0.1"
+description = "A playground for type-level programming in Rust"
 authors = ["Jared Roesch <roeschinc@gmail.com>"]
+keywords = ["generic", "type-level"]
 
 [lib]
-
 name = "molten"
 path = "src/lib.rs"
